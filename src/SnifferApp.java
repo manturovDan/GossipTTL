@@ -1,7 +1,9 @@
 import org.pcap4j.core.*;
+import org.pcap4j.packet.EthernetPacket;
 import org.pcap4j.util.NifSelector;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 public class SnifferApp {
     static PcapNetworkInterface getNetworkDevice() {
@@ -29,11 +31,12 @@ public class SnifferApp {
         int readTimeout = 50; //ms
         PcapHandle handle = device.openLive(snapshotLength, PcapNetworkInterface.PromiscuousMode.PROMISCUOUS, readTimeout);
 
-        PacketListener listener = new PacketListener() {
-            @Override
-            public void gotPacket(PcapPacket pcapPacket) {
-                System.out.println(pcapPacket);
-            }
+        //String filter = "eth";
+        //handle.setFilter(filter, BpfProgram.BpfCompileMode.OPTIMIZE);
+
+        PacketListener listener = pcapPacket -> {
+            System.out.println(pcapPacket);
+
         };
 
         try {
