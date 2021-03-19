@@ -12,6 +12,9 @@ import java.io.IOException;
 
 public class SendEthernetRequest {
     public static void main(String[] args) throws PcapNativeException {
+        String from = args[0];
+        String to = args[1];
+
         PcapNetworkInterface nif;
         try {
             nif = new NifSelector().selectNetworkInterface();
@@ -30,8 +33,8 @@ public class SendEthernetRequest {
 
         EthernetPacket.Builder ethBuilder = new EthernetPacket.Builder();
 
-        ethBuilder.dstAddr(MacAddress.getByName("1a:35:75:85:6f:78"))
-                .srcAddr(MacAddress.getByName("52:54:00:78:e5:97"))
+        ethBuilder.dstAddr(MacAddress.getByName(to)) //1a:35:75:85:6f:78
+                .srcAddr(MacAddress.getByName(from)) //52:54:00:78:e5:97
                 .type(EtherType.getInstance((short)0x9001))
                 .pad(new byte[] {5, 5, 5});
 
