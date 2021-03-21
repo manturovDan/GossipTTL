@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="513.0" prefWidth="963.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gossip.app.gui.UserInterface">
+   <children>
+      <ScrollPane hbarPolicy="NEVER" layoutX="14.0" layoutY="11.0" prefHeight="488.0" prefWidth="447.0" />
+      <TextField layoutX="482.0" layoutY="50.0" prefHeight="44.0" prefWidth="472.0" promptText="sended gossip">
+         <font>
+            <Font name="Ubuntu" size="23.0" />
+         </font>
+      </TextField>
+      <Button layoutX="885.0" layoutY="102.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="66.0" text="Send!" />
+      <Text layoutX="482.0" layoutY="32.0" strokeType="OUTSIDE" strokeWidth="0.0" text="My Mac: ">
+         <font>
+            <Font name="Ubuntu" size="19.0" />
+         </font>
+      </Text>
+    <AnchorPane layoutX="560.0" layoutY="174.0" minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0">
+         <children>
+            <ScrollPane hbarPolicy="NEVER" layoutX="-80.0" layoutY="-17.0" prefHeight="340.0" prefWidth="472.0" />
+         </children>
+      </AnchorPane>
+      <Line endX="371.0" layoutX="583.0" layoutY="43.0" startX="-100.0" />
+      <Line endX="364.0" layoutX="583.0" layoutY="143.0" startX="-100.0" />
+   </children>
+</AnchorPane>
