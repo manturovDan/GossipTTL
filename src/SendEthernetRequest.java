@@ -36,7 +36,7 @@ public class SendEthernetRequest {
         ethBuilder.dstAddr(MacAddress.getByName(to)) //1a:35:75:85:6f:78
                 .srcAddr(MacAddress.getByName(from)) //52:54:00:78:e5:97
                 .type(EtherType.getInstance((short)0x9001))
-                .pad(new byte[] {5, 5, 5});
+                .pad(new byte[] {1, 5, 5});
 
         Packet p = ethBuilder.build();
         System.out.println(p);
