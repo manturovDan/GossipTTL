@@ -32,7 +32,7 @@ public class Runner {
     public String getMacTableInString() {
         StringBuilder macs = new StringBuilder();
 
-        for (String mac : macTable) {
+        for (String mac : macTable) { 
             macs.append(mac).append("\n");
         }
 
