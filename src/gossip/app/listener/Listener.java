@@ -14,9 +14,9 @@ public class Listener implements Runnable {
     private PacketListener listener;
 
     public Listener(Runner runner) {
-        this.runner = runner; //bytes
-        int snapshotLength = 65536; //ms
-        int readTimeout = 50;
+        this.runner = runner;
+        int snapshotLength = 65536;//bytes
+        int readTimeout = 50; //ms
 
         try {
             handle = runner.getNet().openLive(snapshotLength, PcapNetworkInterface.PromiscuousMode.PROMISCUOUS, readTimeout);

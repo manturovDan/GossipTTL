@@ -33,7 +33,8 @@ public class SendEthernetRequest {
         PcapHandle sendHandle = nif.openLive(65536, PcapNetworkInterface.PromiscuousMode.PROMISCUOUS, 50);
 
         EthernetPacket.Builder ethBuilder = new EthernetPacket.Builder();
-        byte[] message = new byte[] {1, 0, 0, 0, 10, 1, 15, 72, 101, 108, 108, 111, 32, 87, 111, 114, 108, 100};
+        //byte[] message = new byte[] {1, 0, 0, 0, 10, 1, 15, 72, 101, 108, 108, 111, 32, 87, 111, 114, 108, 100};
+        byte[] message = new byte[] {0, 0, 0, 0, 10, 1, 15, 72, 101, 108, 108, 111, 32, 87, 111, 114, 108, 100};
 
         ethBuilder.dstAddr(MacAddress.getByName(to)) //1a:35:75:85:6f:78
                 .srcAddr(MacAddress.getByName(from)) //52:54:00:78:e5:97

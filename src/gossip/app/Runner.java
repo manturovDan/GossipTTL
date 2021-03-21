@@ -25,6 +25,16 @@ public class Runner {
         return macTable;
     }
 
+    public String getMacTableInString() {
+        StringBuilder macs = new StringBuilder();
+
+        for (String mac : macTable) {
+            macs.append(mac).append("\n");
+        }
+
+        return macs.toString();
+    }
+
     private Set<String> macTable;
 
     public PcapNetworkInterface getNet() {
@@ -51,6 +61,8 @@ public class Runner {
         ExecutorService executor = Executors.newFixedThreadPool(2);
 
         gui = new UserInterface();
+        UserInterface.setRunner(this);
+
         listener = new Listener(this);
 
         executor.execute(new Thread(gui));

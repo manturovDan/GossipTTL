@@ -12,12 +12,18 @@
             <Font name="Ubuntu" size="23.0" />
          </font>
       </TextField>
-      <Button fx:id="sendBtn" layoutX="444.0" layoutY="50.0" mnemonicParsing="false" onAction="#click" prefHeight="44.0" prefWidth="66.0" text="Send!" />
+      <Button fx:id="sendBtn" layoutX="444.0" layoutY="50.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="66.0" text="Send!" />
       <Text layoutX="17.0" layoutY="32.0" strokeType="OUTSIDE" strokeWidth="0.0" text="My Mac: " wrappingWidth="552.7459945678711">
          <font>
             <Font name="Ubuntu" size="19.0" />
          </font>
       </Text>
       <Line endX="371.0" layoutX="115.0" layoutY="38.0" startX="-100.0" />
+      <ScrollPane layoutX="17.0" layoutY="131.0" prefHeight="310.0" prefWidth="526.0" fx:id="macPane">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0" />
+        </content>
+      </ScrollPane>
+      <Button layoutX="480.0" layoutY="453.0" mnemonicParsing="false" onAction="#updClick" text="Update" />
    </children>
 </AnchorPane>

@@ -1,5 +1,6 @@
 package gossip.app.gui;
 
+import gossip.app.Runner;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -16,13 +17,19 @@ import java.net.URL;
 
 public class UserInterface extends Application implements Runnable {
     @FXML
-    ScrollPane infoPane;
+    ScrollPane macPane;
 
     @FXML
     Button sendBtn;
 
+    private static Runner runner;
+
     public static void main(String[] args) {
         Application.launch();
+    }
+
+    public static void setRunner(Runner runner) {
+        UserInterface.runner = runner;
     }
 
     @Override
@@ -42,18 +49,8 @@ public class UserInterface extends Application implements Runnable {
         Application.launch();
     }
 
-    public void setTextToInfoPane() {
-        setTextToInfoPaneCalled(null);
-    }
-
     @FXML
-    private void setTextToInfoPaneCalled(ActionEvent event) {
-        System.out.println("call action");
-        sendBtn.setText("Hello");
-    }
-
-    @FXML
-    private void click(ActionEvent event) {
-        infoPane.setContent(new Text("hello"));
+    private void updClick(ActionEvent event) {
+        macPane.setContent(new Text(runner.getMacTableInString()));
     }
 }
