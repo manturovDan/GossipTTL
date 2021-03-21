@@ -32,7 +32,7 @@ public class Listener implements Runnable {
             try {
                 EthernetPacket eth = EthernetPacket.newPacket(pcapPacket.getRawData(), 0, pcapPacket.length());
                 EtherType type = eth.getHeader().getType();
-                if (type.equals(EtherType.getInstance((short)0x9001))) {
+                if (type.equals(EtherType.getInstance((short)0x9001)))/* && !eth.getHeader().getSrcAddr().toString().equals(runner.getMyMac())*/ {
                     runner.registerGossipPackage(eth.getRawData());
                 }
             } catch (IllegalRawDataException e) {
