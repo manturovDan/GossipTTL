@@ -5,14 +5,13 @@ import gossip.app.frame.GossipFrameMeaning;
 import gossip.app.gui.UserInterface;
 import gossip.app.listener.Listener;
 import gossip.app.listener.Parser;
+import gossip.app.sender.Sender;
+import org.pcap4j.core.PcapNativeException;
 import org.pcap4j.core.PcapNetworkInterface;
 import org.pcap4j.util.NifSelector;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -20,9 +19,14 @@ public class Runner {
     private PcapNetworkInterface net;
     private Listener listener;
     private UserInterface gui;
+    private int sendersCount = 2;
 
     public Set<String> getMacTable() {
         return macTable;
+    }
+
+    public String getMyMac() {
+        return net.getLinkLayerAddresses().get(0).toString();
     }
 
     public String getMacTableInString() {
@@ -70,7 +74,7 @@ public class Runner {
 
         macTable = Collections.synchronizedSet(new HashSet<>());
 
-
+        macTable.add("34:e1:2d:64:54:88");
     }
 
     public void registerGossipPackage(byte[] rawData) {
@@ -79,7 +83,24 @@ public class Runner {
         System.out.println(frame);
 
         if (frame instanceof GossipFrameMeaning) {
+            if (((GossipFrameMeaning) frame).getTtl() > 0) {
+                GossipFrameMeaning resendFrame = (GossipFrameMeaning) frame;
+                Sender sender = new Sender(resendFrame, this);
+                sender.changePacketToResend();
 
+                List<String> chosenMacs = new ArrayList<>(macTable);
+                Collections.shuffle(chosenMacs);
+
+                for (int i = 0; i < Math.min(chosenMacs.size(), sendersCount); ++i) {
+                    try {
+                        System.out.println("> " + chosenMacs.get(i));
+                        sender.send(chosenMacs.get(i), net);
+                        System.out.println("sent");
+                    } catch (PcapNativeException e) {
+                        System.out.println(e);
+                    }
+                }
+            }
         } else {
             macTable.add(frame.getSrcAddr());
         }

@@ -1,6 +1,9 @@
 package gossip.app.frame;
 
-public class GossipFrameMeaning extends GossipFrame {
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
+
+public class GossipFrameMeaning extends GossipFrame implements Cloneable {
     protected int ttl;
     protected String message;
     protected int len;
@@ -36,8 +39,23 @@ public class GossipFrameMeaning extends GossipFrame {
         this.len = len;
     }
 
+    public byte[] getMessageArray() {
+        byte[] msg = new byte[1 + 4 + 2 + message.length()];
+        msg[0] = 1;
+        System.arraycopy(ByteBuffer.allocate(4).putInt(ttl).array(), 0, msg, 1, 4);
+        System.arraycopy(ByteBuffer.allocate(2).putShort((short)len).array(), 0, msg, 5, 2);
+        System.arraycopy(message.getBytes(StandardCharsets.UTF_8), 0, msg, 7, message.length());
+
+        return msg;
+    }
+
     @Override
     public String toString() {
         return srcAddr + " sent '" + message + "' with TTL=" + ttl;
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 }
