@@ -7,6 +7,7 @@ import org.pcap4j.packet.IllegalRawDataException;
 import org.pcap4j.packet.namednumber.EtherType;
 
 import java.util.Arrays;
+import java.util.regex.Pattern;
 
 public class Listener implements Runnable {
     private final Runner runner;
@@ -28,12 +29,17 @@ public class Listener implements Runnable {
     }
 
     public void initListener() {
+        Pattern multicastPattern = Pattern.compile("^01:00:5[eE]:(?:[0-9a-fA-F]{2}:){2}[0-9a-fA-F]{2}$");
         listener = pcapPacket -> {
             try {
                 EthernetPacket eth = EthernetPacket.newPacket(pcapPacket.getRawData(), 0, pcapPacket.length());
                 EtherType type = eth.getHeader().getType();
-                if (type.equals(EtherType.getInstance((short)0x9001))&& !eth.getHeader().getSrcAddr().toString().equals(runner.getMyMac())) {
-                    runner.registerGossipPackage(eth.getRawData());
+                if (type.equals(EtherType.getInstance((short)0x9001)) && !eth.getHeader().getSrcAddr().toString().equals(runner.getMyMac())) {
+                    //System.out.println(multicastPattern.matcher(eth.getHeader().getDstAddr().toString()).matches());
+                    if (!multicastPattern.matcher(eth.getHeader().getDstAddr().toString()).matches() ||
+                            Parser.IsMulticastMacCorrespondsToIP(runner.getMyIP(), eth.getHeader().getDstAddr().toString())) {
+                        runner.registerGossipPackage(eth.getRawData());
+                    }
                 }
             } catch (IllegalRawDataException e) {
                 e.printStackTrace();

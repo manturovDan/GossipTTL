@@ -30,6 +30,10 @@ public class Runner {
         return net.getLinkLayerAddresses().get(0).toString();
     }
 
+    public String getMyIP() {
+        return net.getAddresses().get(0).getAddress().getHostAddress();
+    }
+
     public String getMacTableInString() {
         StringBuilder macs = new StringBuilder();
 
@@ -59,11 +63,17 @@ public class Runner {
     }
 
     public void run() {
-        System.out.println("PROGRAM START!");
+        System.out.println("PROGRAM START (v1.1)!");
         net = getNetworkDevice();
         System.out.println("My Mac address :" + net.getLinkLayerAddresses() );
+        System.out.println("My IP address: " + getMyIP());
 
-        initialize();
+        boolean initialized = false;
+        while (!initialized) {
+            initialized = initialize();
+            if (!initialized)
+                System.out.println("Try one more time");
+        }
 
         ExecutorService executor = Executors.newFixedThreadPool(2);
 
@@ -81,9 +91,9 @@ public class Runner {
     }
 
     public void registerGossipPackage(byte[] rawData) {
-        System.out.println(Arrays.toString(rawData));
+        System.out.println("raw data: " + Arrays.toString(rawData));
         GossipFrame frame = Parser.parse(rawData);
-        System.out.println(frame);
+        System.out.println("frame: " + frame);
 
         if (frame instanceof GossipFrameMeaning) {
             if (((GossipFrameMeaning) frame).getTtl() > 0) {
@@ -114,15 +124,18 @@ public class Runner {
         }
     }
 
-    private void initialize() {
+    private boolean initialize() {
         Scanner sc = new Scanner(System.in);
         System.out.println("Insert count of resend destinations (N): ");
-        sendersCount = sc.nextInt();
+        sendersCount = Integer.parseInt(sc.nextLine());
 
-        System.out.println("Insert dst MACs (throw comma): " );
-        String macs = sc.next();
+        System.out.println("Insert dst MACs (throw comma), or 0 to do nothing: " );
+        String macs = sc.nextLine();
 
-        String[] macAddr = macs.split(",");
+        if (macs.equals("0"))
+            return true;
+
+        String[] macAddr = macs.split(",\\s*");
 
         GossipFrame register = new GossipFrame(getMyMac());
         RegisterSender sender = new RegisterSender(register, this);
@@ -132,8 +145,10 @@ public class Runner {
                 System.out.println("reg: " + mac);
                 sender.send(mac, net);
             } catch (PcapNativeException e) {
-                System.out.println(e);
+                return false;
             }
         }
+
+        return true;
     }
 }
