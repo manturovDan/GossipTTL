@@ -2,6 +2,10 @@ package gossip.app.listener;
 
 import gossip.app.frame.GossipFrame;
 import gossip.app.frame.GossipFrameMeaning;
+import inet.ipaddr.Address;
+import inet.ipaddr.HostIdentifierString;
+import inet.ipaddr.IPAddressString;
+import inet.ipaddr.MACAddressString;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
@@ -81,5 +85,43 @@ public class Parser {
         System.arraycopy(raw, start, copy, 0, realLen);
 
         return new String(copy, StandardCharsets.UTF_8);
+    }
+
+    public static String IPToBin(String ip) {
+        HostIdentifierString hostIP = new IPAddressString(ip);
+        return addressToBin(hostIP);
+    }
+
+    public static String MacToBin(String mac) {
+        HostIdentifierString hostMac = new MACAddressString(mac);
+        return addressToBin(hostMac);
+    }
+
+    private static String addressToBin(HostIdentifierString host) {
+        Address address;
+        try {
+            address = host.toAddress();
+        } catch (Exception e) {
+            throw new RuntimeException();
+        }
+
+        byte[] bytes = address.getBytes();
+
+        StringBuilder ipBuilder = new StringBuilder(32);
+        for (byte aByte : bytes) {
+            ipBuilder.append(String.format("%8s", Integer.toBinaryString(aByte & 0xFF)).replace(' ', '0'));
+        }
+
+        return ipBuilder.toString();
+    }
+
+    public static boolean IsMulticastMacCorrespondsToIP(String ip, String mac) {
+        String hostIp = IPToBin(ip);
+        String hostMac = MacToBin(mac);
+
+        String last23IP = hostIp.substring(32 - 23);
+        String last23Mac = hostMac.substring(48 - 23);
+
+        return last23Mac.equals(last23IP);
     }
 }
