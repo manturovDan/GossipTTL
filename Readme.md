@@ -10,4 +10,4 @@ When host recieves a message, it share it if ttl > 1.
 The program works with unicast, multicast and broadcast addresses.
 
 UI:
-[image]("dumps/screen.png")
+[image]("https://raw.githubusercontent.com/manturovDan/GossipTTL/master/dumps/screen.png")
